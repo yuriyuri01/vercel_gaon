@@ -152,6 +152,7 @@ export default function CommunityWrite() {
 
       alert("게시글 작성 성공!");
       router.push(`/Community_list?tab=${encodeURIComponent(category)}`);
+      router.refresh();
     } catch (err) {
       console.error(err);
       alert(err.message || "게시글 작성 중 오류 발생");

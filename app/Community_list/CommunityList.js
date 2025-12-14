@@ -65,7 +65,9 @@ export default function CommunityList() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const res = await fetch("/api/community/community_list");
+                const res = await fetch("/api/community/community_list", {
+                    cache: "no-store",
+                });
                 if (!res.ok) throw new Error("게시글 조회 실패");
                 const data = await res.json();
                 setItems(data.posts || []);
