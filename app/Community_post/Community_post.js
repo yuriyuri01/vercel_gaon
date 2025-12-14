@@ -50,7 +50,9 @@ export default function CommunityPost() {
         if (!postId) return;
         const fetchPost = async () => {
             try {
-                const res = await fetch(`/api/community/getPost?id=${postId}`);
+                const res = await fetch(`/api/community/getPost?id=${postId}`, {
+                    cache: "no-store", // 🔹 항상 최신 데이터 fetch
+                });
                 if (!res.ok) throw new Error("게시글 조회 실패");
                 const data = await res.json();
                 if (data.post) setPostData(data.post);
@@ -95,7 +97,7 @@ export default function CommunityPost() {
     }, [contentRowRef.current]);
 
     const { title, content, images, userId, category } = postData;
-   
+
 
     const mainImage = images && images.length > 0 ? images[0] : null;
     const thumbnails = images && images.length > 1 ? images.slice(1, 4) : [];
@@ -120,6 +122,7 @@ export default function CommunityPost() {
 
             alert("게시글이 삭제되었습니다.");
             router.push("/Community_list");
+            router.refresh();
         } catch (err) {
             console.error(err);
             alert("삭제 중 오류가 발생했습니다.");
