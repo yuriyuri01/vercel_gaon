@@ -45,6 +45,14 @@ export default function CommunityList() {
 
     const router = useRouter();
 
+    useEffect(() => {
+        const tabFromUrl = searchParams.get("tab");
+        if (tabFromUrl) {
+            setActiveTab(tabFromUrl);
+        }
+    }, [searchParams]);
+
+
     // 로그인 유저 불러오기
     useEffect(() => {
         const fetchUser = async () => {
@@ -61,7 +69,6 @@ export default function CommunityList() {
         fetchUser();
     }, []);
 
-    // 전체 게시글 불러오기
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -75,8 +82,10 @@ export default function CommunityList() {
                 console.error(e);
             }
         };
+
         fetchPosts();
-    }, []);
+    }, [searchParams]); // ⭐ 이 줄이 핵심
+
 
     // 탭 변경 / 검색어 변경 시 필터링
     useEffect(() => {
@@ -139,7 +148,10 @@ export default function CommunityList() {
                             key={i}
                             className={`${styles.tabItem} ${activeTab === tab ? styles.active : ""
                                 }`}
-                            onClick={() => setActiveTab(tab)}
+                            onClick={() => {
+                                setActiveTab(tab);
+                                router.push(`/Community_list?tab=${encodeURIComponent(tab)}`);
+                            }}
                         >
                             {i !== 0 && <span className={styles.separator}>|</span>} {tab}
                         </span>
